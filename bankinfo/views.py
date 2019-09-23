@@ -4,6 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from django.db.models.functions import Greatest
 import pandas as pd
@@ -22,8 +23,8 @@ device_info = {
 }
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated,))
-@authentication_classes((JSONWebTokenAuthentication,))
+#@permission_classes((IsAuthenticated,))
+#@authentication_classes((JSONWebTokenAuthentication,))
 def read(request):
 #    with open('report.csv', newline='') as csvfile:
 #        reader = csv.DictReader(csvfile)
@@ -36,12 +37,10 @@ def read(request):
         pc_rate = float(row[4])
         notebook_rate = float(row[5])
         etc_rate = float(row[6])
-        print(etc_rate)
         if row[7] != '-':
             pad_rate = float(row[7])
         else:
             pad_rate = 0
-        print(pad_rate)
         try:
             bulk_bankinfo.append(BankInfo(
                 year=year,
@@ -58,8 +57,8 @@ def read(request):
     return Response({"result": True, "response": "Read data from report.csv"})
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated,))
-@authentication_classes((JSONWebTokenAuthentication,))
+#@permission_classes((IsAuthenticated,))
+#@authentication_classes((JSONWebTokenAuthentication,))
 def deviceinfo(request):
     devices = []
     for key in device_info:
@@ -71,8 +70,8 @@ def deviceinfo(request):
     return JsonResponse(result)
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated,))
-@authentication_classes((JSONWebTokenAuthentication,))
+#@permission_classes((IsAuthenticated,))
+#@authentication_classes((JSONWebTokenAuthentication,))
 def mostallyear(request):
     bankinfos = BankInfo.objects.all()
     devices = []
@@ -90,8 +89,8 @@ def mostallyear(request):
 
 
 @api_view(['POST'])
-@permission_classes((IsAuthenticated,))
-@authentication_classes((JSONWebTokenAuthentication,))
+#@permission_classes((IsAuthenticated,))
+#@authentication_classes((JSONWebTokenAuthentication,))
 def mostinyear(request):
     s_year =  request.data['year']
     try:
@@ -109,8 +108,8 @@ def mostinyear(request):
     return JsonResponse(results)
 
 @api_view(['POST'])
-@permission_classes((IsAuthenticated,))
-@authentication_classes((JSONWebTokenAuthentication,))
+#@permission_classes((IsAuthenticated,))
+#@authentication_classes((JSONWebTokenAuthentication,))
 def mostindevice(request):
     device_id = request.data['device_id']
     device_index = device_name.index(device_id)
